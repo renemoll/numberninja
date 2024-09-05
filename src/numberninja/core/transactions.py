@@ -7,13 +7,16 @@ from money.money import Money
 class Transaction(collections.abc.Mapping):
     """Representation of a single transaction.
 
-    Terminology
+    A Transaction is an immutable data type, think of it as a view (data type) of an actual
+    transaction. As such, the Transactions needs to be initialised with a set of required
+    fields (`Transaction._valid_fields`).
+
+    Information from the transaction can be accessed as any map.
+
+    Terminology:
         creation_date: date the transaction is created.
         value_date: date when the amount becomes (un)available.
         entry_date: date the transactions is processed by the bank (journal entry).
-
-    Todo:
-    * fill optional field with a default value?
     """
 
     _valid_fields = [
@@ -31,6 +34,11 @@ class Transaction(collections.abc.Mapping):
     ]
 
     def __init__(self, data: typing.Mapping) -> None:
+        """Create a new Transaction from raw data.
+
+        Args:
+        - data (dict): map containing data of a single transaction.
+        """
         self._data = {k: v for k, v in data.items() if k in self._valid_fields}
 
         if not all([x in self._data.keys() for x in self._required_fields]):

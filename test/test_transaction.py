@@ -4,6 +4,7 @@ from money.currency import Currency
 
 from numberninja.core import Transaction
 import pytest
+from .utilities import compare_list
 
 
 def test_create_transaction():
@@ -83,6 +84,47 @@ def test_create_transaction_invalid_entries_are_removed():
     assert "value_date" in dut
     assert "creation_date" in dut
     assert "description" in dut
+
+
+def test_iteration():
+    # 1. Prepare
+    dut = Transaction(
+        {
+            "entry_date": datetime.date(2018, 4, 15),
+            "value_date": datetime.date(2018, 4, 16),
+            "creation_date": datetime.date(2018, 4, 15),
+            "amount": Money("123.45", Currency.EUR),
+            "description": "Dummy",
+        }
+    )
+
+    # 2. Execute
+    keys = [k for k in dut]
+
+    # 3. Verify
+    assert compare_list(
+        keys, ["entry_date", "value_date", "creation_date", "amount", "description"]
+    )
+
+
+def test_iteration_items():
+    # 1. Prepare
+    raw = {
+        "entry_date": datetime.date(2018, 4, 15),
+        "value_date": datetime.date(2018, 4, 16),
+        "creation_date": datetime.date(2018, 4, 15),
+        "amount": Money("123.45", Currency.EUR),
+        "description": "Dummy",
+    }
+    dut = Transaction(raw)
+
+    # 2. Execute & verify
+    copy = {}
+    for k, v in dut.items():
+        assert k in raw
+        assert v == raw[k]
+        copy[k] = v
+    assert raw == copy
 
 
 def test_data_access():
@@ -167,25 +209,24 @@ def test_equality():
     }
 
 
-def test_iteration():
+def test_immutability():
     # 1. Prepare
-    raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
-        "description": "Dummy",
-    }
-    dut = Transaction(raw)
+    dut = Transaction(
+        {
+            "entry_date": datetime.date(2018, 4, 15),
+            "value_date": datetime.date(2018, 4, 16),
+            "creation_date": datetime.date(2018, 4, 15),
+            "amount": Money("123.45", Currency.EUR),
+            "description": "Dummy",
+        }
+    )
 
     # 2. Execute & verify
-    copy = {}
-    for k, v in dut.items():
-        assert k in raw
-        assert v == raw[k]
-        copy[k] = v
-    assert raw == copy
+    with pytest.raises(TypeError):
+        dut["value_date"] = None
 
+    with pytest.raises(TypeError):
+        dut["description"] = "something else"
 
-def test_immutability():
-    pass
+    with pytest.raises(TypeError):
+        del dut["description"]

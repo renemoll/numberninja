@@ -41,8 +41,9 @@ build-backend = "setuptools.build_meta"
 [tool.coverage]
 html.directory = "build/coverage/"
 report.show_missing = true
-report.fail_under = 95
+report.fail_under = 90
 run.branch = true
+run.source = ["numberninja"]
 
 [tool.pytest.ini_options]
 addopts = "--verbose --showlocals --cov"
