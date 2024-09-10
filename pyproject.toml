@@ -15,7 +15,8 @@ classifiers = [
 dynamic = ["version"]
 
 dependencies = [
-  "py-money>=0.5"
+  "python-dateutil",
+  "py-money>=0.5",
 ]
 
 [project.optional-dependencies]
@@ -26,17 +27,42 @@ test = [
   "pytest>=8.3",
   "pytest-cov>=5.0"
 ]
+behaviour = [
+  "behave"
+]
 
 [project.urls]
 Homepage = "https://github.com/renemoll/numberninja"
 Issues = "https://github.com/renemoll/numberninja/issues"
 
+#
+# Entry points
+#
+
 [project.scripts]
 numberninja-cli = "numberninja:cli"
+
+#
+# Build system
+#
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "numberninja.__version__"}
+
+#
+# Linters
+#
+
+[tool.ruff.lint.per-file-ignores]
+"test/features/steps/*" = ["F811"]
+
+#
+# Testing
+#
 
 [tool.coverage]
 html.directory = "build/coverage/"
@@ -47,6 +73,3 @@ run.source = ["numberninja"]
 
 [tool.pytest.ini_options]
 addopts = "--verbose --showlocals --cov"
-
-[tool.setuptools.dynamic]
-version = {attr = "numberninja.__version__"}

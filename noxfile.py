@@ -18,3 +18,9 @@ def coverage_report(session: nox.Session) -> None:
     session.install(".[test]")
     session.run("pytest")
     session.run("coverage", "html")
+
+
+@nox.session
+def behaviour(session: nox.Session) -> None:
+    session.install(".[behaviour]")
+    session.run("behave", "test/features/")

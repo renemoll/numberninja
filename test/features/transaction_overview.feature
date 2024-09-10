@@ -7,11 +7,11 @@ Feature: transaction overview
 	  When requesting the latest transactions
 	  Then all transactions within the last month are listed
 	   And sorted by date descending
-	   
+
   Scenario: List transactions within a specific time range
      Given a working system with example data
-	  When requesting transactions from "1 August 2024" - "30 August 2024" 
-	  Then all transactions within "August 2024" are listed
+	  When requesting transactions from "1 April 2018" - "30 April 2018"
+	  Then all transactions within "April 2018" are listed
 	   And sorted by date descending
 
   Scenario: List transactions within a specific amount range
@@ -22,6 +22,6 @@ Feature: transaction overview
 
   Scenario: List transactions matching a description
      Given a working system with example data
-	  When requesting transactions where the description contains "rent"  
+	  When requesting transactions where the description contains "rent"
 	  Then all transactions with the word "rent" in the description within the last month are listed
 	   And sorted by date descending
