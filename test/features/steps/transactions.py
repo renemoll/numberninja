@@ -1,10 +1,10 @@
-import behave
-from datetime import datetime
-import dateutil.relativedelta
-from money.money import Money
-from money.currency import Currency
-import dateutil
+import datetime
 import re
+
+import behave
+import dateutil.relativedelta
+import money.currency
+import money.money
 
 
 @behave.when("requesting the latest transactions")
@@ -14,16 +14,16 @@ def step_impl(context):
 
 @behave.when('requesting transactions from "{first_date}" - "{last_date}"')
 def step_impl(context, first_date, last_date):
-    first = datetime.strptime(first_date, "%d %B %Y")
-    last = datetime.strptime(last_date, "%d %B %Y")
+    first = datetime.datetime.strptime(first_date, "%d %B %Y").date()
+    last = datetime.datetime.strptime(last_date, "%d %B %Y").date()
     context.response = context.app.transactions(
-        {"value_date": {"first_date": first, "last_date": last}}
+        {"value_date": {"from": first, "until": last}}
     )
 
 
 @behave.when('requesting transactions of at least "{currency}" "{amount}"')
 def step_impl(context, currency, amount):
-    amount = Money(amount, Currency(currency))
+    amount = money.money.Money(amount, money.currency.Currency(currency))
     context.response = context.app.transactions(
         {"amount": {"operator": ">=", "value": amount}}
     )
@@ -55,7 +55,7 @@ def step_impl(context):
 
 @behave.then('all transactions within "{month}" are listed')
 def step_impl(context, month):
-    date = datetime.strptime(month, "%B %Y")
+    date = datetime.datetime.strptime(month, "%B %Y")
 
     def date_matcher(t):
         return t["value_date"].month == date.month and t["value_date"].year == date.year
@@ -71,7 +71,7 @@ def step_impl(context, month):
 )
 def step_impl(context, currency, amount):
     def amount_matcher(t):
-        return t["amount"] >= Money(amount, Currency(currency))
+        return t["amount"] >= money.money.Money(amount, money.currency.Currency(currency))
 
     ts = [t for t in context.data_set if amount_matcher(t)]
     assert len(ts) > 0
@@ -95,9 +95,7 @@ def step_impl(context, needle):
     assert ts == context.response
 
 
-"""TODO: implement"""
-
-
 @behave.then("sorted by date descending")
 def step_impl(context):
+    """TODO: implement"""
     pass

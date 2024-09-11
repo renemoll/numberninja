@@ -1,9 +1,10 @@
 import datetime
-from money.money import Money
-from money.currency import Currency
+
+import money.money
+import money.currency
+import pytest
 
 from numberninja.core import Transaction
-import pytest
 from .utilities import compare_list
 
 
@@ -13,7 +14,7 @@ def test_create_transaction():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
 
@@ -48,7 +49,7 @@ def test_create_transaction_without_optional_fields_succeeds():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
     }
 
     # 2. Execute
@@ -69,7 +70,7 @@ def test_create_transaction_invalid_entries_are_removed():
         "date": datetime.date(2018, 4, 10),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
         "alternative": "ignored",
     }
@@ -93,7 +94,7 @@ def test_iteration():
             "entry_date": datetime.date(2018, 4, 15),
             "value_date": datetime.date(2018, 4, 16),
             "creation_date": datetime.date(2018, 4, 15),
-            "amount": Money("123.45", Currency.EUR),
+            "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )
@@ -113,7 +114,7 @@ def test_iteration_items():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
     dut = Transaction(raw)
@@ -134,13 +135,13 @@ def test_data_access():
             "entry_date": datetime.date(2018, 4, 15),
             "value_date": datetime.date(2018, 4, 16),
             "creation_date": datetime.date(2018, 4, 15),
-            "amount": Money("123.45", Currency.EUR),
+            "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )
 
     # 2. Execute & verify
-    assert dut["amount"] == Money("123.45", Currency.EUR)
+    assert dut["amount"] == money.money.Money("123.45", money.currency.Currency.EUR)
     assert dut["entry_date"] == datetime.date(2018, 4, 15)
     assert dut["value_date"] == datetime.date(2018, 4, 16)
     assert dut["creation_date"] == datetime.date(2018, 4, 15)
@@ -154,7 +155,7 @@ def test_data_access_invalid_key_raises_keyerror():
             "entry_date": datetime.date(2018, 4, 15),
             "value_date": datetime.date(2018, 4, 16),
             "creation_date": datetime.date(2018, 4, 15),
-            "amount": Money("123.45", Currency.EUR),
+            "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )
@@ -171,7 +172,7 @@ def test_equality():
             "entry_date": datetime.date(2018, 4, 15),
             "value_date": datetime.date(2018, 4, 16),
             "creation_date": datetime.date(2018, 4, 15),
-            "amount": Money("123.45", Currency.EUR),
+            "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )
@@ -180,7 +181,7 @@ def test_equality():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
 
@@ -188,7 +189,7 @@ def test_equality():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "difference",
     }
 
@@ -196,14 +197,14 @@ def test_equality():
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
     }
 
     assert dut != {
         "entry_date": datetime.date(2018, 4, 15),
         "value_date": datetime.date(2018, 4, 16),
         "creation_date": datetime.date(2018, 4, 15),
-        "amount": Money("123.45", Currency.EUR),
+        "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "difference",
         "dummy": "invalid",
     }
@@ -216,7 +217,7 @@ def test_immutability():
             "entry_date": datetime.date(2018, 4, 15),
             "value_date": datetime.date(2018, 4, 16),
             "creation_date": datetime.date(2018, 4, 15),
-            "amount": Money("123.45", Currency.EUR),
+            "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )

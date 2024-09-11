@@ -33,6 +33,14 @@
             "description": "Withdraw"
         },
         {
+            "entry_date": "02-03-2018",
+            "value_date": "02-03-2018",
+            "creation_date": "02-03-2018",
+            "amount": "-44.45",
+            "currency": "EUR",
+            "description": "Car rental"
+        },
+        {
             "entry_date": "01-03-2018",
             "value_date": "01-03-2018",
             "creation_date": "01-03-2018",

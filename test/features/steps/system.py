@@ -1,9 +1,10 @@
-import behave
 import datetime
 import json
 import pathlib
-from money.money import Money
-from money.currency import Currency
+
+import behave
+import money.currency
+import money.money
 
 import numberninja
 
@@ -22,14 +23,14 @@ def step_impl(context):
                 {
                     "entry_date": datetime.datetime.strptime(
                         m["entry_date"], "%d-%m-%Y"
-                    ),
+                    ).date(),
                     "value_date": datetime.datetime.strptime(
                         m["value_date"], "%d-%m-%Y"
-                    ),
+                    ).date(),
                     "creation_date": datetime.datetime.strptime(
                         m["creation_date"], "%d-%m-%Y"
-                    ),
-                    "amount": Money(m["amount"], Currency(m["currency"])),
+                    ).date(),
+                    "amount": money.money.Money(m["amount"], money.currency.Currency(m["currency"])),
                     "description": m["description"],
                 }
             )

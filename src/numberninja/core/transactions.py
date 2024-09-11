@@ -1,7 +1,8 @@
 import collections
-import typing
 import datetime
-from money.money import Money
+import typing
+
+import money.money
 
 
 class Transaction(collections.abc.Mapping):
@@ -44,7 +45,7 @@ class Transaction(collections.abc.Mapping):
         if not all([x in self._data.keys() for x in self._required_fields]):
             raise TypeError("Missing required field")
 
-    def __getitem__(self, key: str) -> typing.Union[str, datetime.date, Money]:
+    def __getitem__(self, key: str) -> typing.Union[str, datetime.date, money.money.Money]:
         return self._data[key]
 
     def __iter__(self) -> typing.Iterator[str]:
