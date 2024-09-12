@@ -17,7 +17,7 @@ def step_impl(context, first_date, last_date):
     first = datetime.datetime.strptime(first_date, "%d %B %Y").date()
     last = datetime.datetime.strptime(last_date, "%d %B %Y").date()
     context.response = context.app.transactions(
-        {"value_date": {"from": first, "until": last}}
+        {"date": {"from": first, "until": last}}
     )
 
 
@@ -34,20 +34,11 @@ def step_impl(context, needle):
     context.response = context.app.transactions({"description": {"contains": needle}})
 
 
-@behave.then("all transactions within the last month are listed")
-def step_impl(context):
-    def date_matcher(t):
-        delta = dateutil.relativedelta.relativedelta(months=1)
-        now = context.data_set_date
-        past = now - delta
-        return (
-            t["value_date"].month >= past.month
-            and t["value_date"].month <= now.month
-            and t["value_date"].year >= past.year
-            and t["value_date"].year <= now.year
-        )
+@behave.then('the last "{amount}" transactions are listed')
+def step_impl(context, amount):
+    amount = min(int(amount), len(context.data_set))
+    ts = context.data_set[-amount:]
 
-    ts = [t for t in context.data_set if date_matcher(t)]
     assert len(ts) > 0
     assert len(context.response) > 0
     assert ts == context.response
@@ -58,7 +49,7 @@ def step_impl(context, month):
     date = datetime.datetime.strptime(month, "%B %Y")
 
     def date_matcher(t):
-        return t["value_date"].month == date.month and t["value_date"].year == date.year
+        return t["date"].month == date.month and t["date"].year == date.year
 
     ts = [t for t in context.data_set if date_matcher(t)]
     assert len(ts) > 0

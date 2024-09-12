@@ -21,14 +21,8 @@ def step_impl(context):
         context.data_set = [
             numberninja.core.Transaction(
                 {
-                    "entry_date": datetime.datetime.strptime(
-                        m["entry_date"], "%d-%m-%Y"
-                    ).date(),
-                    "value_date": datetime.datetime.strptime(
-                        m["value_date"], "%d-%m-%Y"
-                    ).date(),
-                    "creation_date": datetime.datetime.strptime(
-                        m["creation_date"], "%d-%m-%Y"
+                    "date": datetime.datetime.strptime(
+                        m["date"], "%d-%m-%Y"
                     ).date(),
                     "amount": money.money.Money(m["amount"], money.currency.Currency(m["currency"])),
                     "description": m["description"],

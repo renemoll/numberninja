@@ -18,19 +18,16 @@ class Transaction(collections.abc.Mapping):
         creation_date: date the transaction is created.
         value_date: date when the amount becomes (un)available.
         entry_date: date the transactions is processed by the bank (journal entry).
+        date: same as creation_date
     """
 
     _valid_fields = [
-        "creation_date",
-        "value_date",
-        "entry_date",
+        "date",
         "amount",
         "description",
     ]
     _required_fields = [
-        "creation_date",
-        "value_date",
-        "entry_date",
+        "date",
         "amount",
     ]
 

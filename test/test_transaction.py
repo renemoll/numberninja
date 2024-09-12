@@ -11,9 +11,7 @@ from .utilities import compare_list
 def test_create_transaction():
     # 1. Prepare
     raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
@@ -22,20 +20,16 @@ def test_create_transaction():
     dut = Transaction(raw)
 
     # 3. Verify
-    assert len(dut) == 5
+    assert len(dut) == 3
     assert "amount" in dut
-    assert "entry_date" in dut
-    assert "value_date" in dut
-    assert "creation_date" in dut
+    assert "date" in dut
     assert "description" in dut
 
 
 def test_create_transaction_without_required_fields_fails():
     # 1. Prepare
     raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
     }
 
     # 2. Execute & verify
@@ -46,9 +40,7 @@ def test_create_transaction_without_required_fields_fails():
 def test_create_transaction_without_optional_fields_succeeds():
     # 1. Prepare
     raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
     }
 
@@ -56,20 +48,15 @@ def test_create_transaction_without_optional_fields_succeeds():
     dut = Transaction(raw)
 
     # 3. Verify
-    assert len(dut) == 4
+    assert len(dut) == 2
     assert "amount" in dut
-    assert "entry_date" in dut
-    assert "value_date" in dut
-    assert "creation_date" in dut
+    assert "date" in dut
 
 
 def test_create_transaction_invalid_entries_are_removed():
     # 1. Prepare
     raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "date": datetime.date(2018, 4, 10),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
         "alternative": "ignored",
@@ -79,11 +66,9 @@ def test_create_transaction_invalid_entries_are_removed():
     dut = Transaction(raw)
 
     # 3. Verify
-    assert len(dut) == 5
+    assert len(dut) == 3
     assert "amount" in dut
-    assert "entry_date" in dut
-    assert "value_date" in dut
-    assert "creation_date" in dut
+    assert "date" in dut
     assert "description" in dut
 
 
@@ -91,9 +76,7 @@ def test_iteration():
     # 1. Prepare
     dut = Transaction(
         {
-            "entry_date": datetime.date(2018, 4, 15),
-            "value_date": datetime.date(2018, 4, 16),
-            "creation_date": datetime.date(2018, 4, 15),
+            "date": datetime.date(2018, 4, 15),
             "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
@@ -104,16 +87,14 @@ def test_iteration():
 
     # 3. Verify
     assert compare_list(
-        keys, ["entry_date", "value_date", "creation_date", "amount", "description"]
+        keys, ["date", "amount", "description"]
     )
 
 
 def test_iteration_items():
     # 1. Prepare
     raw = {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
@@ -132,9 +113,7 @@ def test_data_access():
     # 1. Prepare
     dut = Transaction(
         {
-            "entry_date": datetime.date(2018, 4, 15),
-            "value_date": datetime.date(2018, 4, 16),
-            "creation_date": datetime.date(2018, 4, 15),
+            "date": datetime.date(2018, 4, 15),
             "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
@@ -142,9 +121,7 @@ def test_data_access():
 
     # 2. Execute & verify
     assert dut["amount"] == money.money.Money("123.45", money.currency.Currency.EUR)
-    assert dut["entry_date"] == datetime.date(2018, 4, 15)
-    assert dut["value_date"] == datetime.date(2018, 4, 16)
-    assert dut["creation_date"] == datetime.date(2018, 4, 15)
+    assert dut["date"] == datetime.date(2018, 4, 15)
     assert dut["description"] == "Dummy"
 
 
@@ -152,9 +129,7 @@ def test_data_access_invalid_key_raises_keyerror():
     # 1. Prepare
     dut = Transaction(
         {
-            "entry_date": datetime.date(2018, 4, 15),
-            "value_date": datetime.date(2018, 4, 16),
-            "creation_date": datetime.date(2018, 4, 15),
+            "date": datetime.date(2018, 4, 15),
             "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
@@ -169,41 +144,31 @@ def test_equality():
     # 1. Prepare
     dut = Transaction(
         {
-            "entry_date": datetime.date(2018, 4, 15),
-            "value_date": datetime.date(2018, 4, 16),
-            "creation_date": datetime.date(2018, 4, 15),
+            "date": datetime.date(2018, 4, 15),
             "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
     )
 
     assert dut == {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "Dummy",
     }
 
     assert dut != {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "difference",
     }
 
     assert dut != {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
     }
 
     assert dut != {
-        "entry_date": datetime.date(2018, 4, 15),
-        "value_date": datetime.date(2018, 4, 16),
-        "creation_date": datetime.date(2018, 4, 15),
+        "date": datetime.date(2018, 4, 15),
         "amount": money.money.Money("123.45", money.currency.Currency.EUR),
         "description": "difference",
         "dummy": "invalid",
@@ -214,9 +179,7 @@ def test_immutability():
     # 1. Prepare
     dut = Transaction(
         {
-            "entry_date": datetime.date(2018, 4, 15),
-            "value_date": datetime.date(2018, 4, 16),
-            "creation_date": datetime.date(2018, 4, 15),
+            "date": datetime.date(2018, 4, 15),
             "amount": money.money.Money("123.45", money.currency.Currency.EUR),
             "description": "Dummy",
         }
@@ -224,7 +187,7 @@ def test_immutability():
 
     # 2. Execute & verify
     with pytest.raises(TypeError):
-        dut["value_date"] = None
+        dut["date"] = None
 
     with pytest.raises(TypeError):
         dut["description"] = "something else"

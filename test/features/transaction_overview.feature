@@ -5,7 +5,7 @@ Feature: transaction overview
   Scenario: List transactions
      Given a working system with example data
 	  When requesting the latest transactions
-	  Then all transactions within the last month are listed
+	  Then the last "10" transactions are listed
 	   And sorted by date descending
 
   Scenario: List transactions within a specific time range

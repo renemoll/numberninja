@@ -19,10 +19,7 @@ class NumberNinja:
     def transactions(self, criteria=None):
         """TODO: parse criteria"""
         if criteria is None:
-            delta = dateutil.relativedelta.relativedelta(months=1)
-            today = datetime.date.today()
-            criteria = {"value_date": {"from": today, "until": today - delta}}
-
+            criteria = {}
         return filter_transactions(self._transactions, criteria)
 
     def load_data(self, raw):
@@ -31,14 +28,8 @@ class NumberNinja:
             self._transactions.append(
                 Transaction(
                     {
-                        "entry_date": datetime.datetime.strptime(
-                            m["entry_date"], "%d-%m-%Y"
-                        ).date(),
-                        "value_date": datetime.datetime.strptime(
-                            m["value_date"], "%d-%m-%Y"
-                        ).date(),
-                        "creation_date": datetime.datetime.strptime(
-                            m["creation_date"], "%d-%m-%Y"
+                        "date": datetime.datetime.strptime(
+                            m["date"], "%d-%m-%Y"
                         ).date(),
                         "amount": money.money.Money(m["amount"], money.currency.Currency(m["currency"])),
                         "description": m["description"],
