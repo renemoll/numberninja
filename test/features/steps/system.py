@@ -15,16 +15,16 @@ def step_impl(context):
     assert context.app is not None
 
     data_file = pathlib.Path(__file__).parent / "example_data" / "basic_set.json"
-    with open(data_file) as json_file:
+    with data_file.open() as json_file:
         json_data = json.load(json_file)
 
         context.data_set = [
             numberninja.core.Transaction(
                 {
-                    "date": datetime.datetime.strptime(
-                        m["date"], "%d-%m-%Y"
-                    ).date(),
-                    "amount": money.money.Money(m["amount"], money.currency.Currency(m["currency"])),
+                    "date": datetime.datetime.strptime(m["date"], "%d-%m-%Y").date(),
+                    "amount": money.money.Money(
+                        m["amount"], money.currency.Currency(m["currency"])
+                    ),
                     "description": m["description"],
                 }
             )

@@ -13,18 +13,17 @@ def compare_list(a: typing.List, b: typing.List) -> bool:
                 True when the contents of both lists are the same.
     """
     logger = logging.getLogger(__name__)
+    logger.debug("Comparing lists: %s vs %b", a, b)
 
     copy = list(a)
-    logger.debug(f"Comparing lists: {copy} vs {b}")
-
     try:
         for x in b:
             copy.remove(x)
     except ValueError as e:
-        logger.debug(f"Could not match element: {str(e)}")
+        logger.debug("Could not match element: %s", str(e))
         return False
 
     if copy:
-        logger.debug(f"Remaining elements: {copy}")
+        logger.debug("Remaining elements: %s", copy)
 
     return not copy

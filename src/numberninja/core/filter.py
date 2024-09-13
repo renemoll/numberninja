@@ -1,19 +1,34 @@
-import decimal
+"""Functions to filter transactions."""
+
 import operator
 import re
+import typing
 
-def filter_transactions(transactions, criteria):
-    """
-    TODO: when comparing amounts, use the currency 
-    """
+from .transactions import Transaction
 
+
+def filter_transactions(
+    transactions: typing.List[Transaction],
+    criteria: typing.Optional[typing.Mapping[str, typing.Any]],
+) -> typing.List[Transaction]:
+    """Filter a list of transactions based on a set of criteria.
+
+    Args:
+        transactions: list of transactions.
+        criteria: criteria mapped on transaction keys.
+
+    Returns:
+        A list of transactions matching the given criteria.
+
+    TODO: when comparing amounts, use the currency
+    """
     result = transactions
 
     if "date" in criteria:
         if "from" in criteria["date"]:
-            result = [t for t in result if _matcher_from_date(t, criteria["date"]["from"])]
+            result = [t for t in result if t["date"] >= criteria["date"]["from"]]
         if "until" in criteria["date"]:
-            result = [t for t in result if _matcher_until_date(t, criteria["date"]["until"])]
+            result = [t for t in result if t["date"] <= criteria["date"]["until"]]
 
     if "amount" in criteria:
         ops = {
@@ -22,7 +37,7 @@ def filter_transactions(transactions, criteria):
             "==": operator.eq,
             "!=": operator.ne,
             ">=": operator.ge,
-            ">": operator.gt
+            ">": operator.gt,
         }
         op = ops[criteria["amount"]["operator"]]
         amount = criteria["amount"]["value"]
@@ -31,13 +46,10 @@ def filter_transactions(transactions, criteria):
 
     if "description" in criteria:
         needle = criteria["description"]["contains"]
-        result = [t for t in result if re.search(r"\b{}\b".format(needle), t["description"], re.IGNORECASE)]
+        result = [
+            t
+            for t in result
+            if re.search(rf"\b{needle}\b", t["description"], re.IGNORECASE)
+        ]
 
     return result
-
-def _matcher_from_date(t, date):
-    return t["date"] >= date
-
-def _matcher_until_date(t, date):
-    return t["date"] <= date
-

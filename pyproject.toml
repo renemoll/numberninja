@@ -1,5 +1,5 @@
 [project]
-name = "numberninja"
+name = "NumberNinja"
 description = "A personal bookkeeping application"
 authors = [
   { name="René Moll" },
@@ -57,8 +57,37 @@ version = {attr = "numberninja.__version__"}
 # Linters
 #
 
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "FA",     # FA: flake8-future-annotations
+  "COM812", # COM812: trailing comma missing
+  "DTZ007", # DTZ007: call-datetime-strptime-without-zone (TODO: remove)
+  "E501",   # E501: line too long
+  "EM101",  # EM101: raw-string-in-exception
+  "TRY003", # TRY003: raise-vanilla-args
+]
+
 [tool.ruff.lint.per-file-ignores]
-"test/features/steps/*" = ["F811"]
+"noxfile.py" = ["ALL"]
+"test/features/steps/*" = [
+  "ANN",  # ANN: flake8-annotations
+  "D",    # D: pydocstyle
+  "F811", # F811: redefined-while-unused
+  "INP",  # INP: flake8-no-pep420
+]
+"test/*.py" = [
+  "ANN",     # ANN: flake8-annotations
+  "D",       # D: pydocstyle
+  "PLR2004", # PLR2004: magic-value-comparison
+  "S101",    # S101: assert
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 #
 # Testing

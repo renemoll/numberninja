@@ -2,7 +2,6 @@ import datetime
 import re
 
 import behave
-import dateutil.relativedelta
 import money.currency
 import money.money
 
@@ -62,7 +61,9 @@ def step_impl(context, month):
 )
 def step_impl(context, currency, amount):
     def amount_matcher(t):
-        return t["amount"] >= money.money.Money(amount, money.currency.Currency(currency))
+        return t["amount"] >= money.money.Money(
+            amount, money.currency.Currency(currency)
+        )
 
     ts = [t for t in context.data_set if amount_matcher(t)]
     assert len(ts) > 0
@@ -75,10 +76,7 @@ def step_impl(context, currency, amount):
 )
 def step_impl(context, needle):
     def description_matcher(t):
-        return (
-            re.search(r"\b{}\b".format(needle), t["description"], re.IGNORECASE)
-            is not None
-        )
+        return re.search(rf"\b{needle}\b", t["description"], re.IGNORECASE) is not None
 
     ts = [t for t in context.data_set if description_matcher(t)]
     assert len(ts) > 0
@@ -89,4 +87,3 @@ def step_impl(context, needle):
 @behave.then("sorted by date descending")
 def step_impl(context):
     """TODO: implement"""
-    pass

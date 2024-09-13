@@ -1,10 +1,11 @@
 import datetime
 
-import money.money
 import money.currency
+import money.money
 import pytest
 
 from numberninja.core import Transaction
+
 from .utilities import compare_list
 
 
@@ -83,12 +84,10 @@ def test_iteration():
     )
 
     # 2. Execute
-    keys = [k for k in dut]
+    keys = list(dut)
 
     # 3. Verify
-    assert compare_list(
-        keys, ["date", "amount", "description"]
-    )
+    assert compare_list(keys, ["date", "amount", "description"])
 
 
 def test_iteration_items():
